@@ -330,3 +330,11 @@ Password is not encrypted! Use HTTPS.
 ### Delete user entity [DELETE]
 
 + Response 204
+
+## GUI messages [/guiMessage/{code}]
+
+### Get GUI message [GET]
+
++ Response 200 (text/plain)
+    
+    Lista turniejów
