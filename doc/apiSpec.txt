@@ -1,0 +1,332 @@
+FORMAT: 1A
+HOST: http://polls.apiblueprint.org/
+
+# tennisLogPro API
+
+Api that allows to register user, login user, CRUD for tournament, match and set.
+
+## Registration [/register]
+
+### Register new user [POST]
+
+Create a new user
+
++ Request (application/json)
+
+        {
+            "login": "mruczek",
+            "password": "2ED06766795D58A4F22D511A672F20A6B096D3FE5B56AF3A744678A9A356FD82",
+            "email": "mrrrr@koty.pl"
+        }
+
++ Response 201
+
+## Login [/login]
+
+Checks credentials and establish the session when they are OK.
+
+### Send credentials to the server [POST]
+
+Password is not encrypted! Use HTTPS.
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "login": "kowalt",
+                "password": "2ED06766795D58A4F22D511A672F20A6B096D3FE5B56AF3A744678A9A356FD82"
+            }
+
++ Response 200 (application/json)
+
+    + Headers
+
+            Set-Cookie: name="session_id"; path=/; domain=DOMAIN
+
++ Response 401 (application/json)
+
+        {
+            "error": "Bad login or password"
+        }
+
+## Tournaments [/tournaments]
+
+### Get list of tournaments [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            [
+                {
+                    "id": "1",
+                    "name": "Super cup",
+                    "photo": "<base64 encoded image>"
+                },
+                {
+                    "id": "2",
+                    "name": "PLNC cup",
+                    "photo": "<base64 encoded image>"
+                }
+            ]
+
+### Create new tournament [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "name": "Warsaw open",
+                "photo": "<base64 encoded image>",
+                "banner": "<base64 encoded image>",
+                "setsPerMatch": 3,
+                "legs": 2
+            }
+
++ Response 201
+
+## Particular tournament [/tournaments/{id}]
+
+### Get a single tournament data [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "id":"1",
+                "name": "Warsaw open",
+                "photo": "<base64 encoded image>",
+                "banner": "<base64 encoded image>",
+                "setsPerMatch": 3,
+                "legs": 2,
+                "plannedStartDate": 1502343230,
+                "status": "OPEN"
+            }
+
+### Create or update a tournament [POST]
+
++ Request (application/json)
+
+    + Body
+            
+            {
+                "id":"1",
+                "name": "Warsaw open",
+                "photo": "<base64 encoded image>",
+                "banner": "<base64 encoded image>",
+                "setsPerMatch": 3,
+                "legs": 2,
+                "plannedStartDate": 1502343230,
+                "status": "OPEN"
+            }
+
++ Response 201
+
+### Delete a tournament [DELETE]
+
++ Response 204
+
+## Applications for a tournament [/tournamentApplications/{id}]
+
+### List applications [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "playerIds": [5,8,11]
+            }
+
+### Respond to application [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "playerId": 3,
+                "status": "OK"
+            }
+
++ Response 204
+
+## Start tournament [/tournamentStart]
+
+### Start tournament [POST]
+
++ Request 201
+
+    + Body
+    
+            {
+                "tournamentId":5
+            }
+
++ Response 204
+
+## Matches [/matches]
+
+### Get the list of matches [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            [
+                {
+                    "id": "1",
+                    "playerHomeId": 5,
+                    "playerAwayId": 3,
+                    "startDate": 1502343230,
+                    "idTournament": 3,
+                    "sets": [{6,3},{6,4},{7,5}],
+                    "numberOfSets": 5
+                },
+                {
+                    "id": "2",
+                    "playerHomeId": 3,
+                    "playerAwayId": 5,
+                    "startDate": 1602343230,
+                    "idTournament": 1,
+                    "sets": null,
+                    "numberOfSets": 5
+                }
+            ]
+
+## Single match [/matches/{id}]
+
+### Set the result of a match [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "sets": [{6,3},{6,4},{7,5}] 
+            }
+
++ Response 204
+
+## Result table [/matches/table/{tournament_id}]
+
+### Obtain the result table [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            [
+                {
+                    "playerName":"Mruczek Kotecki",
+                    "points": 8,
+                    "matchesWon": 3,
+                    "matchesLost": 5,
+                    "setsWon": 15,
+                    "setsLost": 0,
+                    "gamesWon": 555,
+                    "gamesLost": 70
+                },
+                {
+                    "playerName":"Piotr Miałczyński",
+                    "points": 8,
+                    "matchesWon": 3,
+                    "matchesLost": 5,
+                    "setsWon": 15,
+                    "setsLost": 0,
+                    "gamesWon": 555,
+                    "gamesLost": 70
+                }                
+            ]
+
+## Manage account [/manageAccount/{user_id}]
+
+### Obtain the user data [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            {
+                "id":2,
+                "login": "miau26",
+                "email": "mrrr@koty.pl",
+                "photo": "<base64 encoded data>",
+                "name": "Mruczek Kotecki"
+            }
+
+### Set user data [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            {
+                "login": "miau26",
+                "email": "mrrr@koty.pl",
+                "photo": "<base64 encoded data>",
+                "name": "Mruczek Kotecki"
+            }
+
++ Response 201
+
+## Administration [/admin]
+
+### List users with roles [GET]
+
++ Response 200 (application/json)
+
+    + Body
+    
+            [
+                {
+                    "id": 1,
+                    "login": "miau24",
+                    "name": "Mruczek Kotecki",
+                    "email": "miaaau@koty.pl",
+                    "photo": "<base64 encoded data>",
+                    "roles": [1,2]
+                },
+                {
+                    "id": 2,
+                    "login": "foobar",
+                    "name": "Foo Barson",
+                    "email": "brownfox@foo.pl",
+                    "photo": "<base64 encoded data>",
+                    "roles": [0,1,2]                
+                }
+            ]
+            
+### Set users' data and roles [POST]
+
++ Request (application/json)
+
+    + Body
+    
+            [
+                {
+                    "id": 1,
+                    "login": "miau24",
+                    "name": "Mruczek Kotecki",
+                    "email": "miaaau@koty.pl",
+                    "roles": [1,2]
+                },
+                {
+                    "id": 2,
+                    "login": "foobar",
+                    "name": "Foo Barson",
+                    "email": "brownfox@foo.pl",
+                    "roles": [0,1,2]                
+                }
+            ]
+            
++ Response 201
+
+## Administration: delete user [/admin/{userId}]
+
+### Delete user entity [DELETE]
+
++ Response 204
