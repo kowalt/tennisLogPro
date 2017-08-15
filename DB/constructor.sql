@@ -114,11 +114,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `tennisPro`.`Roles_dict`
+-- Table `tennisPro`.`RolesDict`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `tennisPro`.`Roles_dict` (
+CREATE TABLE IF NOT EXISTS `tennisPro`.`RolesDict` (
   `idRoles` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
+  `name` VARCHAR(45) NOT NULL,
   PRIMARY KEY (`idRoles`))
 ENGINE = InnoDB;
 
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `tennisPro`.`User_role` (
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_User_role_Roles_dict1`
     FOREIGN KEY (`Roles_dict_idRoles`)
-    REFERENCES `tennisPro`.`Roles_dict` (`idRoles`)
+    REFERENCES `tennisPro`.`RolesDict` (`idRoles`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS `tennisPro`.`GuiMessage` (
   `idGuiMessage` INT NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(45) NULL,
   `message` VARCHAR(300) NOT NULL,
-  `langCode` VARCHAR(10) NULL,
+  `langCode` VARCHAR(3) NULL,
   PRIMARY KEY (`idGuiMessage`),
   UNIQUE INDEX `code_UNIQUE` (`code` ASC))
 ENGINE = InnoDB;
@@ -180,7 +180,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `tennisPro`.`PlayerStatusInTournamentDict` (
   `idPlayerStatusInTournamentDict` INT NOT NULL AUTO_INCREMENT,
-  `PlayerStatusInTournamentDictcol` VARCHAR(45) NULL,
+  `value` VARCHAR(20) NOT NULL,
   PRIMARY KEY (`idPlayerStatusInTournamentDict`))
 ENGINE = InnoDB;
 
